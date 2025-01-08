@@ -94,11 +94,24 @@ jobs:
 
       - name: Build
         working-directory: ${{ runner.temp }}/shadow_build_dir
-        run:  |
-              export JOBS=$((`sysctl -n hw.ncpu`+1))
-              qmake -query
-              qmake -r ${SOURCE_DIR}/qgroundcontrol.pro CONFIG+=installer CONFIG+=${BUILD_TYPE} -d
-              make -j$JOBS
+        run: |
+          export JOBS=$((`sysctl -n hw.ncpu`+1))
+          # Get SDK path
+          export SDKROOT=$(xcrun --show-sdk-path)
+          export MACOSX_DEPLOYMENT_TARGET=10.14
+          # Set compiler paths explicitly
+          export QMAKE_MAC_SDK=macosx
+          export QMAKE_APPLE_DEVICE_ARCHS=x86_64
+          export CPATH="$SDKROOT/usr/include"
+          export LIBRARY_PATH="$SDKROOT/usr/lib"
+          export QMAKE_DEFAULT_LIBDIRS="$SDKROOT/usr/lib"
+          export QMAKE_DEFAULT_INCDIRS="$SDKROOT/usr/include"
+          qmake -r ${SOURCE_DIR}/qgroundcontrol.pro \
+            CONFIG+=installer \
+            CONFIG+=${BUILD_TYPE} \
+            -spec macx-clang \
+            QMAKE_APPLE_DEVICE_ARCHS=x86_64
+          make -j$JOBS
 
       - name: ccache post-run
         run:  ccache -s
