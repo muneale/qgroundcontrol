@@ -97,7 +97,7 @@ jobs:
         run:  |
               export JOBS=$((`sysctl -n hw.ncpu`+1))
               qmake -query
-              qmake -r ${SOURCE_DIR}/qgroundcontrol.pro CONFIG+=installer CONFIG+=${BUILD_TYPE}
+              qmake -r ${SOURCE_DIR}/qgroundcontrol.pro CONFIG+=installer CONFIG+=${BUILD_TYPE} -d
               make -j$JOBS
 
       - name: ccache post-run
