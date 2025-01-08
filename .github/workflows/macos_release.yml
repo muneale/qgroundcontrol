@@ -59,6 +59,9 @@ jobs:
             for package in *.pkg ;
               do sudo installer -verbose -pkg "$package" -target /
             done
+            # Create symlink from where macdeployqt expects it to where it actually is
+            sudo mkdir -p /Library/lib
+            sudo ln -sf /Library/Frameworks/GStreamer.framework /Library/lib/GStreamer.framework
 
       - name: Install ccache
         run:  brew install ccache
