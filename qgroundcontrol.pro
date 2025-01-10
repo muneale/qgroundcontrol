@@ -1433,6 +1433,7 @@ contains (CONFIG, QGC_DISABLE_INSTALLER_SETUP) {
 }
 
 DISTFILES += \
+    custom/src/ui/toolbar/CustomMainToolBar.qml \
     src/QmlControls/QGroundControl/Specific/qmldir
 
 #
@@ -1452,4 +1453,8 @@ LinuxBuild {
     share_applications.files = $${IN_PWD}/deploy/qgroundcontrol.desktop
 
     INSTALLS += target share_qgroundcontrol share_icons share_metainfo share_applications
+}
+
+android {
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 }
